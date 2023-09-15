@@ -5,14 +5,17 @@ from models import db, connect_db, Playlist, Song, PlaylistSong
 from forms import NewSongForPlaylistForm, SongForm, PlaylistForm
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///playlist-app'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///playlist_app"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ECHO"] = True
 
 connect_db(app)
-db.create_all()
 
-app.config['SECRET_KEY'] = "I'LL NEVER TELL!!"
+with app.app_context():
+    # Create database tables
+    db.create_all()
+
+app.config["SECRET_KEY"] = "I'LL NEVER TELL!!"
 
 # Having the Debug Toolbar show redirects explicitly is often useful;
 # however, if you want to turn it off, you can uncomment this line:
@@ -106,11 +109,8 @@ def add_song_to_playlist(playlist_id):
     form.song.choices = ...
 
     if form.validate_on_submit():
+        # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
 
-          # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
+        return redirect(f"/playlists/{playlist_id}")
 
-          return redirect(f"/playlists/{playlist_id}")
-
-    return render_template("add_song_to_playlist.html",
-                             playlist=playlist,
-                             form=form)
+    return render_template("add_song_to_playlist.html", playlist=playlist, form=form)
