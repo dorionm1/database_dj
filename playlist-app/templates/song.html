@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <div class="jumbotron">
   <h1>{{ song.title }}!</h1>
@@ -8,7 +6,11 @@
 </div>
 
 <ul>
-  DISPLAY ALL OF THE PLAYLISTS THAT THIS SONG IS A PART OF
+  {% for playlist in playlists %}
+  <li>
+    <a href="#">{{playlist.playlist_id}} By: {{playlist.song_id}}</a>
+  </li>
+  {% endfor %}
 </ul>
 
 {% endblock %}
