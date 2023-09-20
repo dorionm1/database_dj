@@ -1,7 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
+<h1>New Playlist</h1>
+<form id="playlist-add-form" method="POST">
+  {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
+  'hidden' %}
 
-<h1>Add a form that when submitted creates a new playlist!</h1>
+  <p>
+    {{ field.label }} {{ field }} {% for error in field.errors %} {{ error }} {%
+    endfor %}
+  </p>
 
+  {% endfor %}
+
+  <button type="submit">Submit</button>
+</form>
 {% endblock %}
