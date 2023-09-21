@@ -51,9 +51,16 @@ def show_playlist(playlist_id):
     playlist = Playlist.query.get(playlist_id)
     songs = PlaylistSong.query.get(playlist_id)
 
-    songs = []
+    playlist_songs = (
+        db.session.query(Song.title)
+        .join(PlaylistSong, Song.id == PlaylistSong.song_id)
+        .filter(PlaylistSong.playlist_id == playlist_id)
+        .all()
+    )
 
-    return render_template("playlist.html", playlist=playlist, songs=songs)
+    return render_template(
+        "playlist.html", playlist=playlist, playlist_songs=playlist_songs
+    )
     # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
 
 
@@ -135,13 +142,19 @@ def add_song_to_playlist(playlist_id):
     playlist = Playlist.query.get_or_404(playlist_id)
 
     form = NewSongForPlaylistForm()
+    choices = []
 
     curr_on_playlist = [s.id for s in playlist.songs]
-    form.song.choices = (
+    results = (
         db.session.query(Song.id, Song.title)
         .filter(Song.id.notin_(curr_on_playlist))
         .all()
     )
+
+    for r in results:
+        choices.append((r.id, r.title))
+
+    form.song.choices = choices
 
     if form.validate_on_submit():
         playlist_song = PlaylistSong(song_id=form.song.data, playlist_id=playlist_id)
@@ -150,6 +163,4 @@ def add_song_to_playlist(playlist_id):
 
         return redirect(f"/playlists/{playlist_id}")
 
-    return render_template(
-        "add_song_to_playlist.html", playlist=playlist, form=form, form=form
-    )
+    return render_template("add_song_to_playlist.html", playlist=playlist, form=form)

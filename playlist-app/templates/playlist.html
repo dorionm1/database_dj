@@ -7,12 +7,13 @@
   {% endif %}
 </div>
 
-<div class="text-danger">
-  {% for song in songs %}
-  <li>
-    <a href="#">{{song.song_id}}></a>
-  </li>
-  {% endfor %}
+<div>
+  <h3>Songs:</h3>
+  <ul>
+    {% for song_title in playlist_songs %}
+    <li>{{ song_title[0] }}</li>
+    {% endfor %}
+  </ul>
 </div>
 
 <p>
